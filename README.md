@@ -2,7 +2,6 @@
 
 The aim of this work is to develop an AI that can play Snake.
 
-![Playing game](img/play.png "Game")
 
 ### Built With
 
@@ -11,6 +10,8 @@ The aim of this work is to develop an AI that can play Snake.
 * [OpenCV](https://opencv.org/)
 * [Scikit Learn](https://scikit-learn.org/stable/) 
 * [Matplotlib](https://matplotlib.org/)
+
+![Playing game](img/play.png "Game")
 
 ## Getting Started
 
