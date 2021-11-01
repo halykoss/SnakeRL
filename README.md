@@ -24,11 +24,11 @@ conda activate snake
 
 ## Usage
 
+![Training results](img/results.png "Results")
+
 ### Training and Testing
 
 Check ***Snake_Python.ipynb*** for usage.
-
-![Training results](img/results.png "Results")
 
 ### Visualization 
 
