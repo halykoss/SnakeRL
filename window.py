@@ -2,12 +2,15 @@ from tkinter import Tk, Button, Canvas, Frame, BOTH
 from game import Snake
 import _thread
 import numpy as np
-
 from tensorflow import keras
+import cv2
+import imageio
 
+root = Tk()
 field = Snake(12, 12)
 
 class GameWindow(Frame):
+
     def __init__(self, game_field, w, h):
         self.game_field = game_field
         super().__init__()
@@ -15,8 +18,8 @@ class GameWindow(Frame):
         self.h = h
         self.canvas = None
         self.start = False
+        self.images = []
         self.initUI()
-        #self.bind("<Key>", self.startEvent)
 
     def keyEvent(self, keycode):
         self.game_field.next_move(keycode)
@@ -50,6 +53,8 @@ class GameWindow(Frame):
 
         self.canvas.pack(fill=BOTH, expand=1)
         self.bind('<Configure>', self.resize)
+        self.canvas.update()
+        self.images.append(self.game_field.generate_image_colored(scale_percent=20))
 
     def resize(self, event):
         self.w = event.width
@@ -58,8 +63,6 @@ class GameWindow(Frame):
         self.canvas.forget()
         self.initUI()
 
-
-root = Tk()
 ex = GameWindow(field, 400, 400)
 
 btn_arr = [
@@ -70,7 +73,7 @@ btn_arr = [
 ]
 
 
-def snake_movement(threadName, delay):
+def snake_movement(threadName, delay, ex):
     width = field.generate_image().shape[0]
     height = field.generate_image().shape[1]
     next_state, _, _ = field.next_move(38)
@@ -82,13 +85,15 @@ def snake_movement(threadName, delay):
         st = np.vstack((st_1, st_2))
         res = np.argmax(model.predict(np.array([st, ]))[0])
         btn_arr[res].invoke()
+
+    imageio.mimsave('img/movie.gif', ex.images)
     print("Usciti {}".format(field.score))
 
 
 def main():
     # Create two threads as follows
     try:
-        _thread.start_new_thread(snake_movement, ("Thread-1", 2,))
+        _thread.start_new_thread(snake_movement, ("Thread-1", 2, ex))
     except:
         print("Error: unable to start thread")
     root.geometry("400x400")

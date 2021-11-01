@@ -2,6 +2,8 @@ import numpy as np
 import math
 import cv2
 from collections import deque
+from PIL import Image
+from PIL import ImageDraw
 
 
 class Snake:
@@ -24,8 +26,8 @@ class Snake:
         stop = False
 
         while not stop:
-            rand_x = np.random.randint(low=1, high=(x-1))
-            rand_y = np.random.randint(low=1, high=(y-1))
+            rand_x = np.random.randint(low=1, high=(x - 1))
+            rand_y = np.random.randint(low=1, high=(y - 1))
             stop = True
             for i in range(0, 4):
                 if rand_x + i >= self.x or self.matrix[rand_x + i][rand_y] != 0:
@@ -70,7 +72,7 @@ class Snake:
         self.turn += 1
         # snake beat on the wall
         if front["x"] + move_x < 0 or front["y"] + move_y < 0 or front["x"] + move_x >= self.x or front[
-                "y"] + move_y >= self.y:
+            "y"] + move_y >= self.y:
             self.end = True
             return self.generate_image(), -100, self.end
 
@@ -122,3 +124,29 @@ class Snake:
 
         resized = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
         return resized
+
+    def generate_image_colored(self, scale_percent=1):
+        width = int(len(self.matrix) * scale_percent)
+        height = int(len(self.matrix) * scale_percent)
+        im = Image.new('RGB', (width, height), (0, 255, 0))
+        draw = ImageDraw.Draw(im)
+        tile_x = width / self.x
+        tile_y = height / self.y
+
+        for i in range(0, self.x):
+            for j in range(0, self.y):
+                color = (110, 198, 255)
+                if self.matrix[i][j] == 255:
+                    color = (56, 142, 60)
+                if self.matrix[i][j] == 127:
+                    color = (172, 8, 0)
+                draw.rectangle([tile_x * i, tile_y * j, tile_x * i + tile_x, tile_y * j + tile_y],
+                               outline=color, fill=color)
+
+        if not self.end:
+            draw.text([50, 30], fill="black",  # font="Purisa",
+                      text="Score: {}".format(self.score))
+        else:
+            draw.text([50, 30], fill="black",  # font="Purisa",
+                      text="Finito")
+        return im
