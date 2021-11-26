@@ -39,8 +39,8 @@ Check ***window.py*** for usage.
 After 100.000 episodes of training, on 200 episodes of testing, I had the following results:
 
 ```
-Average score: 9.55 
-Variance: 76.18 
-Max Value: 30
+Average score: 12.15 
+Variance: 50.27 
+Max Value: 27
 ```
 
