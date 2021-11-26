@@ -1,3 +1,6 @@
 output.csv
 __pycache__/
 .idea/
+/av_snake_model.h5
+/snake_model.h5
+/target_snake_model.h5

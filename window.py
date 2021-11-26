@@ -76,14 +76,18 @@ btn_arr = [
 def snake_movement(threadName, delay, ex):
     width = field.generate_image().shape[0]
     height = field.generate_image().shape[1]
-    next_state, _, _ = field.next_move(38)
-    st_2 = [next_state]
+    st_1 = [field.generate_image().reshape(width, height)]
+    st_2 = [field.generate_image().reshape(width, height)]
+    st_3 = [field.generate_image().reshape(width, height)]
+    st_4 = [field.generate_image().reshape(width, height)]
     model = keras.models.load_model('snake_model.h5')
     while not field.end:
         st_1 = st_2
-        st_2 = [field.generate_image().reshape(width, height)]
-        st = np.vstack((st_1, st_2))
-        res = np.argmax(model.predict(np.array([st, ]))[0])
+        st_2 = st_3
+        st_3 = st_4
+        st_4 = [field.generate_image().reshape(width, height)]
+        st = np.vstack((st_1, st_2, st_3, st_4))
+        res = np.argmax(model.predict(np.array( [st,] ))[0])
         btn_arr[res].invoke()
 
     imageio.mimsave('img/movie.gif', ex.images)
